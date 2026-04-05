@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+/* RESET */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: black;
+  color: white;
+}
+
+/* BASIC TYPOGRAPHY ONLY (no "luxury system") */
+body {
+  font-family: sans-serif;
+}
+
+h1 {
+  letter-spacing: 0.02em;
+}
+
+/* SMOOTH VIDEO RENDER */
+video {
+  display: block;
+}
+
+/* BUTTON BASE */
+button {
+  cursor: pointer;
+}
