@@ -1,265 +1,339 @@
 "use client";
 
 import Hero from "./sections/Hero";
-import { motion, useScroll, useTransform, easeOut } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function Home() {
-const galleryRef = useRef<HTMLDivElement | null>(null);
-const cursorRef = useRef<HTMLDivElement>(null);
-const mainRef = useRef<HTMLDivElement | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [slider, setSlider] = useState(50);
+  const [activeCard, setActiveCard] = useState<number | null>(null);
 
-// ================= CURSOR =================
-useEffect(() => {
-const moveCursor = (e: MouseEvent) => {
-if (!cursorRef.current) return;
-cursorRef.current.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-document.documentElement.style.setProperty("--mx", `${e.clientX}px`);
-document.documentElement.style.setProperty("--my", `${e.clientY}px`);
-};
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1600);
+    return () => clearTimeout(timer);
+  }, []);
 
-window.addEventListener("mousemove", moveCursor);
-return () => window.removeEventListener("mousemove", moveCursor);
+  const { scrollYProgress } = useScroll();
 
-}, []);
+  const aboutY = useTransform(scrollYProgress, [0.1, 0.25], [60, -60]);
+  const servicesY = useTransform(scrollYProgress, [0.25, 0.45], [80, -80]);
+  const transScale = useTransform(scrollYProgress, [0.45, 0.65], [0.95, 1.05]);
+  const stylistScale = useTransform(scrollYProgress, [0.65, 0.8], [1, 1.1]);
 
-// ================= SCROLL =================
-const { scrollYProgress } = useScroll({ target: mainRef });
+  /* 🔥 FIXED INTRO (ACTUALLY RENDERS FIRST) */
+  if (loading) {
+    return (
+      <div className="fixed inset-0 bg-black flex items-center justify-center z-[999] overflow-hidden">
 
-const yHero = useTransform(scrollYProgress, [0, 1], ["0%", "-12%"]);
-const yContent = useTransform(scrollYProgress, [0, 1], ["0%", "-12%"]);
-const scale = useTransform(scrollYProgress, [0, 1], [1, 0.97]);
+        {/* GOLD + PINK AMBIENT */}
+        <div className="absolute inset-0">
+          <div className="absolute w-[600px] h-[600px] bg-[color:var(--gold)]/20 blur-[140px] top-[-20%] left-[-10%]" />
+          <div className="absolute w-[500px] h-[500px] bg-[color:var(--pink)]/20 blur-[140px] bottom-[-20%] right-[-10%]" />
+        </div>
 
-// 🔥 ADD DEPTH FADE (cinematic feel)
-const opacity = useTransform(scrollYProgress, [0, 0.3], [1, 0.85]);
+        <motion.h1
+          initial={{ opacity: 0, y: 40, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 1.2 }}
+          className="display-xl text-[64px] text-[color:var(--gold)] tracking-tight"
+        >
+          LOOKS BY SLIM
+        </motion.h1>
+      </div>
+    );
+  }
 
-const fadeUp = {
-initial: { opacity: 0, y: 100 },
-whileInView: { opacity: 1, y: 0 },
-transition: { duration: 1.2, ease: easeOut },
-viewport: { once: true, margin: "-120px" },
-};
+  return (
+    <main className="text-white overflow-x-hidden scroll-smooth">
 
-// ================= GALLERY =================
-const { scrollYProgress: galleryProgress } = useScroll({ target: galleryRef });
-
-const ySlow = useTransform(galleryProgress, [0, 1], ["0%", "-20%"]);
-const yMedium = useTransform(galleryProgress, [0, 1], ["0%", "-35%"]);
-const yFast = useTransform(galleryProgress, [0, 1], ["0%", "-50%"]);
-
-// ================= SERVICES =================
-const [flipped, setFlipped] = useState<number | null>(null);
-
-const services = [
-{ title: "Braids", items: ["Cornrows", "Boho Braids", "Knotless"] },
-{ title: "Locs", items: ["Starter Locs", "Retwist", "Length (S/M/L)"] },
-];
-
-return ( <main ref={mainRef} className="text-white overflow-x-hidden snap-y snap-mandatory">
-
-```
-  {/* CURSOR */}
-  <div
-    ref={cursorRef}
-    className="fixed w-6 h-6 rounded-full pointer-events-none z-[999]
-    bg-[color:var(--gold)] blur-[10px] opacity-90
-    -translate-x-1/2 -translate-y-1/2"
-  />
-
-  {/* NAV */}
-  <div className="fixed top-0 left-0 w-full z-50 flex justify-center">
-    <div className="mt-4 flex items-center gap-8 px-6 py-3 rounded-full glass">
-
-      <div className="w-14 h-14 rounded-full overflow-hidden border border-[color:var(--gold)]/40 relative">
-        <Image src="/logo/Looksbyslimlogo.png" alt="" fill className="object-cover" />
+      {/* SIDE BRAND LEFT */}
+      <div className="fixed left-4 top-1/2 -translate-y-1/2 rotate-[-90deg] text-white/20 tracking-[0.4em] text-sm z-50">
+        LOOKS BY SLIM
       </div>
 
-      <div className="hidden md:flex gap-6 text-sm text-white/70">
-        {["Services","Stylist","Work","Contact"].map((item,i)=>(
-          <a key={i} href={`#${item.toLowerCase()}`} className="relative group">
-            {item}
-            <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-[color:var(--gold)] group-hover:w-full transition-all duration-300"/>
-          </a>
-        ))}
+      {/* SIDE BRAND RIGHT */}
+      <div className="fixed right-4 top-1/2 -translate-y-1/2 rotate-[90deg] text-white/20 tracking-[0.4em] text-sm z-50">
+        LOOKS BY SLIM
       </div>
 
-      <button className="px-5 py-2 rounded-full border border-[color:var(--gold)]
-      text-[color:var(--gold)] hover:bg-[color:var(--gold)] hover:text-black transition">
-        Book
-      </button>
+      {/* HERO */}
+      <section className="h-screen flex items-center justify-center px-6">
+        <div className="grid md:grid-cols-2 gap-20 max-w-6xl w-full items-center">
 
-    </div>
-  </div>
+          <motion.div
+            initial={{ opacity: 0, y: 80 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+            className="space-y-8 max-w-lg"
+          >
+            <h1 className="display-xl text-[92px] text-[color:var(--gold)] leading-[0.95]">
+              This is not just hair.
+            </h1>
 
-  {/* HERO */}
-  <motion.div style={{ y: yHero }} className="relative h-screen flex items-center justify-center">
+            <p className="text-white/60 text-lg max-w-md">
+              This is identity. Precision. Presence. Crafted detail that transforms how you are seen before you even speak.
+            </p>
 
-    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent,rgba(0,0,0,0.75))]" />
+            <Link href="/book" className="px-8 py-3 border border-[color:var(--gold)]">
+              Book Appointment
+            </Link>
+          </motion.div>
 
-    <div className="hidden lg:block absolute left-[6%] top-1/2 -translate-y-1/2 text-white/20 text-xs tracking-[0.5em] rotate-[-90deg]">
-      LUXURY HAIR EXPERIENCE
-    </div>
-
-    <div className="hidden lg:block absolute right-[6%] top-1/2 -translate-y-1/2 text-white/20 text-xs tracking-[0.5em] rotate-90">
-      PRECISION • CARE • GROWTH
-    </div>
-
-    <Hero />
-  </motion.div>
-
-  {/* CONTENT */}
-  <motion.div style={{ y: yContent, scale, opacity }}>
-
-    {/* INTRO */}
-    <motion.section {...fadeUp} className="min-h-screen snap-start flex items-center justify-center text-center px-6">
-      <div className="max-w-5xl">
-        <h2 className="text-[110px] leading-[1] text-[color:var(--gold)] mb-8">
-          More Than A Style
-        </h2>
-        <p className="text-white/50 max-w-2xl mx-auto text-lg">
-          This is where precision meets care. Every detail, every part, every finish is intentional — 
-          built to elevate not just your look, but your presence.
-        </p>
-      </div>
-    </motion.section>
-
-    {/* SERVICES */}
-    <section id="services" className="min-h-screen snap-start flex items-center justify-center px-6">
-      <div className="grid md:grid-cols-2 gap-12 max-w-6xl w-full">
-
-        {services.map((service, i) => {
-          const isFlipped = flipped === i;
-
-          return (
-            <div key={i} className="perspective" onClick={() => setFlipped(isFlipped ? null : i)}>
-
-              <motion.div
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.97 }}
-                animate={{ rotateY: isFlipped ? 180 : 0 }}
-                transition={{ duration: 0.8 }}
-                className="relative w-full h-[380px] rounded-2xl preserve-3d cursor-pointer
-                border border-white/10 overflow-hidden group"
-              >
-
-                {/* GLOW SWEEP */}
-                <div className="absolute inset-0 bg-[linear-gradient(120deg,transparent,rgba(255,255,255,0.08),transparent)]
-                translate-x-[-100%] group-hover:translate-x-[100%] transition duration-700"/>
-
-                {/* FRONT */}
-                <div className="absolute inset-0 backface-hidden flex items-center justify-center">
-                  <h3 className="text-[56px] text-[color:var(--gold)]">{service.title}</h3>
-                </div>
-
-                {/* BACK */}
-                <div className="absolute inset-0 backface-hidden rotate-y-180 flex flex-col items-center justify-center space-y-4 bg-black/70">
-                  {service.items.map((item, idx) => (
-                    <p key={idx} className="text-white/80 text-base tracking-wide">{item}</p>
-                  ))}
-                </div>
-
-              </motion.div>
+          <div className="flex justify-center">
+            <div className="w-[320px] h-[560px]">
+              <Hero />
             </div>
-          );
-        })}
-      </div>
-    </section>
+          </div>
 
-    {/* STYLIST */}
-    <motion.section {...fadeUp} id="stylist" className="min-h-screen snap-start flex items-center justify-center px-6">
-      <div className="grid md:grid-cols-2 gap-16 max-w-6xl w-full items-center">
+        </div>
+      </section>
 
-        <Image src="/about/stylist.png" alt="" width={800} height={600} className="rounded-2xl object-cover"/>
+      {/* ABOUT */}
+      <section id="about" className="py-64 flex items-center justify-center px-6">
+        <motion.div style={{ y: aboutY }} className="max-w-3xl text-center space-y-8">
 
-        <div className="space-y-8">
-          <h2 className="text-[64px] text-[color:var(--gold)]">Meet the Stylist</h2>
+          <h2 className="text-[80px] tracking-tight text-[color:var(--gold)]">
+            More Than A Style
+          </h2>
 
-          <p className="text-white/50 text-lg">
-            Precision. Discipline. Craft. This is not a service — it’s a standard.
+          <p className="text-white/60 text-lg leading-[1.8]">
+            Every detail is intentional. Every finish refined.
+            This is not just styling — it is transformation.
           </p>
 
-          <p className="text-white/40 leading-relaxed">
-            Shae Gumbs brings over a decade of mastery, cultivating not only styles, 
-            but an environment where creativity, care, and healthy growth coexist. 
-            Every appointment becomes an experience tailored to you.
+          <p className="text-white/50 leading-[1.9]">
+            At <span className="text-white">Looks by Slim</span>, every look is built with intention.
+            Precision is not optional — it is the standard. Each client leaves with more than a style,
+            but a presence that speaks before they do.
           </p>
 
-          <button className="px-8 py-3 bg-[color:var(--gold)] text-black rounded-full">
-            Book Appointment
-          </button>
-        </div>
+          <p className="text-[26px] italic text-[color:var(--gold)] pt-4">
+            “Your hair is the crown you never take off.”
+          </p>
 
-      </div>
-    </motion.section>
-
-    {/* GALLERY */}
-    <section ref={galleryRef} className="min-h-[140vh] snap-start px-6 flex items-center justify-center">
-      <div className="relative max-w-6xl w-full">
-
-        <motion.div style={{ y: ySlow, scale: 1.08 }}>
-          <Image src="/hair/style1.png" alt="" width={1000} height={600}
-            className="w-full h-[520px] object-cover rounded-2xl"
-          />
         </motion.div>
+      </section>
 
-        <motion.div style={{ y: yMedium, rotate: -5 }} className="absolute left-[-50px] top-[55%] w-[260px]">
-          <Image src="/hair/style2.png" alt="" width={300} height={400} className="rounded-2xl"/>
+      {/* 🔥 SERVICES (NOW ACTUALLY PREMIUM + NOT FLAT) */}
+      <section id="services" className="py-56 px-6">
+        <motion.div style={{ y: servicesY }} className="max-w-6xl mx-auto space-y-20">
+
+          <h2 className="text-[80px] text-[color:var(--gold)] text-center">
+            Services
+          </h2>
+
+          <p className="text-center text-white/50 max-w-xl mx-auto">
+            Every service is executed with precision, structure, and intention.
+            Pricing varies based on length, volume, and complexity.
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-14 perspective">
+
+            {[
+              {
+                title: "Braids",
+                items: [
+                  { name: "Cornrows", price: "$80 / $100 / $130" },
+                  { name: "Boho Braids", price: "$120 / $160 / $200" },
+                  { name: "Knotless", price: "$140 / $180 / $240" },
+                ],
+              },
+              {
+                title: "Locs",
+                items: [
+                  { name: "Starter Locs", price: "$100 / $140 / $180" },
+                  { name: "Retwist", price: "$80 / $110 / $140" },
+                  { name: "Length (S/M/L)", price: "$120 / $160 / $220" },
+                ],
+              },
+            ].map((service, i) => {
+              const isActive = activeCard === i;
+
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 100 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.2 }}
+                  viewport={{ once: true }}
+                  onClick={() => setActiveCard(isActive ? null : i)}
+                  className="cursor-pointer"
+                >
+                  <motion.div
+                    animate={{ rotateY: isActive ? 180 : 0 }}
+                    transition={{ duration: 0.9 }}
+                    whileHover={{ y: -12, scale: 1.02 }}
+                    className="relative h-[360px] rounded-2xl border border-white/10 p-10 preserve-3d overflow-hidden bg-black/40 backdrop-blur-xl"
+                  >
+
+                    {/* GOLD FLOW */}
+                    <motion.div
+                      className="absolute inset-0 opacity-30"
+                      animate={{ x: ["-40%", "40%", "-40%"] }}
+                      transition={{ duration: 12, repeat: Infinity }}
+                    >
+                      <div className="w-full h-full bg-gradient-to-r from-transparent via-[color:var(--gold)]/40 to-transparent blur-2xl" />
+                    </motion.div>
+
+                    {/* PINK FLOW */}
+                    <motion.div
+                      className="absolute inset-0 opacity-25"
+                      animate={{ x: ["40%", "-40%", "40%"] }}
+                      transition={{ duration: 14, repeat: Infinity }}
+                    >
+                      <div className="w-full h-full bg-gradient-to-r from-transparent via-[color:var(--pink)]/40 to-transparent blur-2xl" />
+                    </motion.div>
+
+                    {/* FRONT */}
+                    <div className="absolute inset-0 backface-hidden flex flex-col justify-between">
+
+                      <h3 className="text-[46px] text-[color:var(--gold)]">
+                        {service.title}
+                      </h3>
+
+                      <div className="space-y-2">
+                        {service.items.map((item, idx) => (
+                          <div key={idx} className="flex justify-between text-sm">
+                            <span className="text-white/70">{item.name}</span>
+                            <span className="text-[color:var(--gold-soft)]">{item.price}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                    </div>
+
+                    {/* BACK */}
+                    <div className="absolute inset-0 rotate-y-180 backface-hidden flex flex-col justify-center space-y-4">
+                      {service.items.map((item, idx) => (
+                        <div key={idx} className="flex justify-between text-lg border-b border-white/10 pb-2">
+                          <span>{item.name}</span>
+                          <span className="text-[color:var(--gold)]">{item.price}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                  </motion.div>
+                </motion.div>
+              );
+            })}
+
+          </div>
         </motion.div>
+      </section>
 
-        <motion.div style={{ y: yFast, rotate: 5 }} className="absolute right-[-50px] top-[65%] w-[260px]">
-          <Image src="/hair/style3.png" alt="" width={300} height={400} className="rounded-2xl"/>
+      {/* STYLIST */}
+      <section id="stylist" className="py-40 flex items-center justify-center px-6">
+        <div className="grid md:grid-cols-2 gap-20 max-w-6xl w-full items-center">
+
+          <motion.div style={{ scale: stylistScale }}>
+            <Image src="/about/stylist.png" alt="" width={550} height={650} className="rounded-2xl" />
+          </motion.div>
+
+          <motion.div className="space-y-8 max-w-xl">
+            <h2 className="text-[72px] text-[color:var(--gold)] leading-[1]">
+              Shae Gumbs
+            </h2>
+
+            <p className="text-white/40 tracking-widest text-sm">
+              MASTER STYLIST
+            </p>
+
+            <p className="text-white/60 leading-[1.8]">
+              Over a decade dedicated to mastering the craft...
+            </p>
+
+            <p className="text-white/50 leading-[1.8]">
+              Every part is intentional.
+            </p>
+
+            <Link href="/book" className="px-10 py-4 bg-[color:var(--gold)] text-black rounded-full">
+              Book Appointment
+            </Link>
+          </motion.div>
+
+        </div>
+      </section>
+
+      {/* TRANSFORMATION */}
+      <section className="py-48 flex flex-col items-center justify-center px-6 text-center">
+        <h2 className="text-[70px] text-[color:var(--gold)] mb-6">
+          The Transformation
+        </h2>
+
+        <p className="text-white/60 max-w-2xl mb-12 leading-[1.8]">
+          This is where the shift happens.
+        </p>
+
+        <motion.div style={{ scale: transScale }} className="w-full flex justify-center">
+          <div className="relative w-full max-w-3xl h-[420px] overflow-hidden rounded-2xl">
+
+            <Image src="/hair/before1.png" alt="" fill className="object-cover" />
+
+            <div className="absolute top-0 left-0 h-full overflow-hidden" style={{ width: `${slider}%` }}>
+              <Image src="/hair/after1.png" alt="" fill className="object-cover" />
+            </div>
+
+            <label htmlFor="transformation-slider" className="sr-only">
+              Transformation slider
+            </label>
+            <input
+              id="transformation-slider"
+              type="range"
+              min="0"
+              max="100"
+              value={slider}
+              onChange={(e) => setSlider(Number(e.target.value))}
+              title="Transformation slider"
+              aria-label="Transformation slider"
+              className="absolute bottom-4 left-1/2 -translate-x-1/2 w-[60%]"
+            />
+          </div>
         </motion.div>
+      </section>
 
-      </div>
-    </section>
-
-    {/* 🔥 TRANSFORMATION (FIXED — YOU NOW SEE IT) */}
-    <motion.section {...fadeUp} className="min-h-screen snap-start flex flex-col items-center justify-center px-6">
-
-      <div className="text-center mb-16">
-        <h2 className="text-[90px] text-[color:var(--gold)]">Transformation Speaks</h2>
-        <p className="text-white/50 text-lg">Not just styled. Elevated.</p>
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-10 max-w-5xl w-full">
-
-        <div className="relative">
-          <Image src="/hair/before1.png" alt="" width={600} height={600} className="rounded-2xl"/>
-          <span className="absolute bottom-4 left-4 text-xs tracking-widest text-white/50">BEFORE</span>
+      {/* GALLERY */}
+      <section className="py-40 px-6 relative">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
+          {["style1","style2","style3","style4","style5","style6"].map((img, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 80 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.08 }}
+              viewport={{ once: true }}
+              className="relative h-[420px] rounded-2xl overflow-hidden"
+            >
+              <Image src={`/hair/${img}.png`} alt="" fill className="object-cover hover:scale-110 transition duration-700" />
+            </motion.div>
+          ))}
         </div>
+      </section>
 
-        <div className="relative">
-          <Image src="/hair/after1.png" alt="" width={600} height={600} className="rounded-2xl"/>
-          <span className="absolute bottom-4 left-4 text-xs tracking-widest text-white/50">AFTER</span>
-        </div>
+      {/* CTA */}
+      <section className="py-40 flex flex-col items-center justify-center text-center px-6 space-y-6">
+        <h2 className="text-[70px] text-[color:var(--gold)]">
+          Step Into Your Best Look
+        </h2>
 
-      </div>
+        <p className="text-white/50 max-w-md">
+          Your next look isn’t just a style — it’s a statement.
+        </p>
 
-    </motion.section>
+        <Link href="/book" className="px-14 py-5 rounded-full bg-[color:var(--gold)] text-black hover:scale-105 transition">
+          Book Appointment
+        </Link>
+      </section>
 
-    {/* CTA */}
-    <motion.section {...fadeUp} id="contact" className="min-h-screen snap-start flex flex-col items-center justify-center text-center px-6">
-      <h2 className="text-[80px] text-[color:var(--gold)] mb-6">
-        Step Into Your Best Look
-      </h2>
-      <p className="text-white/50 mb-8 max-w-md text-lg">
-        Your next look isn’t just a booking — it’s a statement.
-      </p>
-      <button className="px-14 py-5 rounded-full bg-[color:var(--gold)] text-black">
-        Book Appointment
-      </button>
-    </motion.section>
+      {/* FOOTER */}
+      <footer className="py-12 text-center">
+        <p className="text-white/40 text-sm">
+          Looks By Slim © {new Date().getFullYear()}
+        </p>
+      </footer>
 
-    {/* FOOTER */}
-    <footer className="snap-start py-16 text-center">
-      <p className="text-white/40 text-sm">
-        Looks By Slim © {new Date().getFullYear()}
-      </p>
-    </footer>
-
-  </motion.div>
-</main>
-
-);
+    </main>
+  );
 }

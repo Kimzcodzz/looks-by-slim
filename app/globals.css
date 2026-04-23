@@ -4,7 +4,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap");
 
 /* ============================= */
-/* ✅ KEEP THIS (YOUR PROJECT USES THIS) */
+/* ✅ KEEP THIS */
 /* ============================= */
 @import "tailwindcss";
 
@@ -44,40 +44,48 @@ html, body {
 }
 
 /* ============================= */
-/* 🔥 TYPOGRAPHY (ACTUALLY PREMIUM NOW) */
+/* 🔥 TYPOGRAPHY (UPGRADED) */
 /* ============================= */
 
 body {
   font-family: "Inter", sans-serif;
   font-weight: 400;
-  letter-spacing: 0.025em;
-  line-height: 1.65;
+  letter-spacing: 0.03em;
+  line-height: 1.7;
 }
 
 /* HEADLINES */
 h1, h2, h3 {
   font-family: "Playfair Display", serif;
   font-weight: 500;
-  letter-spacing: -0.025em;
-  line-height: 1.05;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
 }
 
-/* HERO / BIG TEXT */
+/* 🔥 HERO / CINEMATIC TEXT */
 .display {
   font-family: "Playfair Display", serif;
   font-weight: 600;
-  letter-spacing: -0.04em;
-  line-height: 1;
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+}
+
+/* EXTRA DRAMA TEXT */
+.display-xl {
+  font-family: "Playfair Display", serif;
+  font-weight: 600;
+  letter-spacing: -0.06em;
+  line-height: 0.9;
 }
 
 /* BODY TEXT */
 p {
-  letter-spacing: 0.035em;
+  letter-spacing: 0.04em;
   color: rgba(255,255,255,0.75);
 }
 
 /* ============================= */
-/* BACKGROUND */
+/* 🔥 BACKGROUND SYSTEM */
 /* ============================= */
 
 .background-system {
@@ -101,11 +109,11 @@ p {
   background:
     radial-gradient(circle at 25% 30%, rgba(230,194,139,0.35), transparent 60%),
     radial-gradient(circle at 75% 70%, rgba(255,77,141,0.25), transparent 60%);
-  filter: blur(80px);
+  filter: blur(90px);
   opacity: 0.9;
 }
 
-/* FLOW */
+/* FLOW LIGHT */
 .bg-flow {
   position: absolute;
   inset: 0;
@@ -129,31 +137,96 @@ p {
 .cursor-light {
   position: absolute;
   inset: 0;
+  pointer-events: none;
   background: radial-gradient(
     circle at var(--mx) var(--my),
-    rgba(230,194,139,0.2),
+    rgba(230,194,139,0.18),
     transparent 45%
   );
 }
 
 /* ============================= */
-/* UI */
+/* 🔥 UI / GLASS */
 /* ============================= */
 
 .glass {
   background: var(--glass);
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px); /* ✅ FIX SAFARI */
   border: 1px solid var(--border);
+  box-shadow: 0 30px 100px rgba(0,0,0,0.6);
 }
 
+/* SOFT GOLD GLOW */
 .glow-soft {
-  box-shadow: 0 0 40px rgba(230,194,139,0.2);
+  box-shadow:
+    0 0 60px rgba(230,194,139,0.25),
+    inset 0 0 20px rgba(230,194,139,0.1);
 }
+
+/* HOVER LIFT */
+.lift {
+  transition: all 0.5s ease;
+}
+
+.lift:hover {
+  transform: translateY(-6px) scale(1.02);
+}
+
+/* ============================= */
+/* 🔥 GALLERY ENERGY */
+/* ============================= */
+
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+
+  /* ✅ CRITICAL FIX (prevents scroll lock) */
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.gallery-item img {
+  transition: transform 0.8s ease, filter 0.8s ease;
+  pointer-events: none; /* ✅ prevents drag/scroll blocking */
+}
+
+.gallery-item:hover img {
+  transform: scale(1.12) rotate(1deg);
+  filter: brightness(1.05);
+}
+
+/* LIGHT SWEEP EFFECT */
+.gallery-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.15),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.gallery-item:hover::after {
+  opacity: 1;
+}
+
+/* ============================= */
+/* 🔥 BUTTON */
+/* ============================= */
 
 button {
   cursor: pointer;
   transition: all 0.4s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
 }
 
 /* ============================= */
@@ -168,8 +241,10 @@ button {
   transform-style: preserve-3d;
 }
 
+/* ✅ FIXED FOR ALL BROWSERS */
 .backface-hidden {
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .rotate-y-180 {

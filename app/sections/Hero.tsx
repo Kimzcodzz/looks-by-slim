@@ -30,27 +30,23 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative h-screen w-full flex items-center justify-center bg-transparent overflow-hidden">
+    <div className="relative h-full w-full flex items-center justify-center overflow-hidden">
 
-      {/* glow (kept, but toned so it doesn't kill bg) */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,77,141,0.12),transparent_70%)]" />
-
-      {/* FRAME */}
+      {/* CINEMATIC FRAME */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.9, rotateX: 15 }}
+        initial={{ opacity: 0, scale: 0.9, rotateX: 20 }}
         animate={{ opacity: 1, scale: 1, rotateX: 0 }}
-        transition={{ duration: 1.2 }}
+        transition={{ duration: 1.4 }}
         className="
           relative
-          w-[270px] md:w-[360px]
+          w-[280px] md:w-[380px]
           aspect-[9/16]
-          rounded-[38px]
+          rounded-[40px]
           overflow-hidden
           border border-[#e6c28b]/30
-          shadow-[0_40px_160px_rgba(230,194,139,0.25)]
+          shadow-[0_60px_200px_rgba(230,194,139,0.35)]
         "
       >
-
         <video
           ref={videoRef}
           src="/video/herov.mp4"
@@ -60,39 +56,43 @@ export default function Hero() {
           playsInline
           className="
             absolute top-1/2 left-1/2
-            w-[140%] h-[140%]
+            w-[150%] h-[150%]
             -translate-x-1/2 -translate-y-1/2
             object-cover
           "
         />
 
-        <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/90 to-transparent">
+        {/* CINEMATIC TEXT OVERLAY */}
+        <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
 
-          <h1 className="text-[#e6c28b] text-lg text-center mb-3 font-light">
-            This is not just hair.
-          </h1>
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="text-[28px] md:text-[34px] text-[#e6c28b] leading-[1.1] font-serif tracking-tight"
+          >
+            Crafted. Defined. Elevated.
+          </motion.h2>
 
-          <button className="
-            w-full
-            py-3
-            border border-[#e6c28b]
-            text-[#e6c28b]
-            rounded-full
-            hover:bg-[#e6c28b] hover:text-black
-            transition-all duration-500
-          ">
-            Book Appointment
-          </button>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 0.8, y: 0 }}
+            transition={{ delay: 0.6 }}
+            className="text-white/70 text-sm mt-3 leading-[1.6]"
+          >
+            This is more than a hairstyle.  
+            This is structure, discipline, and presence — built strand by strand.
+          </motion.p>
         </div>
-
       </motion.div>
 
+      {/* SOUND */}
       <button
         onClick={toggleSound}
-        className="absolute bottom-6 right-6 text-white text-xs opacity-70"
+        className="absolute bottom-6 right-6 text-white text-xs opacity-70 hover:opacity-100 transition"
       >
         {soundOn ? "SOUND ON" : "SOUND OFF"}
       </button>
-    </section>
+    </div>
   );
 }
