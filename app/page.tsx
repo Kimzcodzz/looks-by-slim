@@ -23,12 +23,11 @@ export default function Home() {
   const transScale = useTransform(scrollYProgress, [0.45, 0.65], [0.95, 1.05]);
   const stylistScale = useTransform(scrollYProgress, [0.65, 0.8], [1, 1.1]);
 
-  /* 🔥 FIXED INTRO (ACTUALLY RENDERS FIRST) */
+  /* INTRO */
   if (loading) {
     return (
       <div className="fixed inset-0 bg-black flex items-center justify-center z-[999] overflow-hidden">
 
-        {/* GOLD + PINK AMBIENT */}
         <div className="absolute inset-0">
           <div className="absolute w-[600px] h-[600px] bg-[color:var(--gold)]/20 blur-[140px] top-[-20%] left-[-10%]" />
           <div className="absolute w-[500px] h-[500px] bg-[color:var(--pink)]/20 blur-[140px] bottom-[-20%] right-[-10%]" />
@@ -117,7 +116,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* 🔥 SERVICES (NOW ACTUALLY PREMIUM + NOT FLAT) */}
+      {/* SERVICES */}
       <section id="services" className="py-56 px-6">
         <motion.div style={{ y: servicesY }} className="max-w-6xl mx-auto space-y-20">
 
@@ -224,7 +223,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* STYLIST */}
+      {/* STYLIST (RESTORED) */}
       <section id="stylist" className="py-40 flex items-center justify-center px-6">
         <div className="grid md:grid-cols-2 gap-20 max-w-6xl w-full items-center">
 
@@ -242,11 +241,13 @@ export default function Home() {
             </p>
 
             <p className="text-white/60 leading-[1.8]">
-              Over a decade dedicated to mastering the craft...
+              Over a decade dedicated to mastering the craft — not just practicing,
+              but refining, studying, and perfecting every detail that defines true
+              precision.
             </p>
 
             <p className="text-white/50 leading-[1.8]">
-              Every part is intentional.
+              Every part is intentional. Every section is placed with purpose.
             </p>
 
             <Link href="/book" className="px-10 py-4 bg-[color:var(--gold)] text-black rounded-full">
@@ -257,14 +258,18 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TRANSFORMATION */}
+      {/* TRANSFORMATION (FULL RESTORED) */}
       <section className="py-48 flex flex-col items-center justify-center px-6 text-center">
+
         <h2 className="text-[70px] text-[color:var(--gold)] mb-6">
           The Transformation
         </h2>
 
         <p className="text-white/60 max-w-2xl mb-12 leading-[1.8]">
-          This is where the shift happens.
+          This is where the shift happens. From unstructured to refined.
+          From ordinary to intentional. Every transformation is built
+          through precision, patience, and an understanding of what
+          elevates not just your look — but your presence.
         </p>
 
         <motion.div style={{ scale: transScale }} className="w-full flex justify-center">
@@ -276,19 +281,14 @@ export default function Home() {
               <Image src="/hair/after1.png" alt="" fill className="object-cover" />
             </div>
 
-            <label htmlFor="transformation-slider" className="sr-only">
-              Transformation slider
-            </label>
             <input
-              id="transformation-slider"
               type="range"
               min="0"
               max="100"
               value={slider}
               onChange={(e) => setSlider(Number(e.target.value))}
-              title="Transformation slider"
-              aria-label="Transformation slider"
               className="absolute bottom-4 left-1/2 -translate-x-1/2 w-[60%]"
+              aria-label="Transformation slider"
             />
           </div>
         </motion.div>
