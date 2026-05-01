@@ -27,7 +27,6 @@ export default function Home() {
   if (loading) {
     return (
       <div className="fixed inset-0 bg-black flex items-center justify-center z-[999] overflow-hidden">
-
         <div className="absolute inset-0">
           <div className="absolute w-[600px] h-[600px] bg-[color:var(--gold)]/20 blur-[140px] top-[-20%] left-[-10%]" />
           <div className="absolute w-[500px] h-[500px] bg-[color:var(--pink)]/20 blur-[140px] bottom-[-20%] right-[-10%]" />
@@ -37,7 +36,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 40, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 1.2 }}
-          className="display-xl text-[64px] text-[color:var(--gold)] tracking-tight"
+          className="display-xl text-[36px] sm:text-[56px] md:text-[64px] text-[color:var(--gold)] tracking-tight text-center px-4"
         >
           LOOKS BY SLIM
         </motion.h1>
@@ -48,41 +47,40 @@ export default function Home() {
   return (
     <main className="text-white overflow-x-hidden scroll-smooth">
 
-      {/* SIDE BRAND LEFT */}
-      <div className="fixed left-4 top-1/2 -translate-y-1/2 rotate-[-90deg] text-white/20 tracking-[0.4em] text-sm z-50">
+      {/* SIDE BRAND (hidden on mobile = cleaner luxury feel) */}
+      <div className="hidden md:block fixed left-4 top-1/2 -translate-y-1/2 rotate-[-90deg] text-white/20 tracking-[0.4em] text-sm z-50">
         LOOKS BY SLIM
       </div>
 
-      {/* SIDE BRAND RIGHT */}
-      <div className="fixed right-4 top-1/2 -translate-y-1/2 rotate-[90deg] text-white/20 tracking-[0.4em] text-sm z-50">
+      <div className="hidden md:block fixed right-4 top-1/2 -translate-y-1/2 rotate-[90deg] text-white/20 tracking-[0.4em] text-sm z-50">
         LOOKS BY SLIM
       </div>
 
       {/* HERO */}
-      <section className="h-screen flex items-center justify-center px-6">
-        <div className="grid md:grid-cols-2 gap-20 max-w-6xl w-full items-center">
+      <section className="min-h-screen flex items-center justify-center px-5 sm:px-6 pt-20 md:pt-0">
+        <div className="grid md:grid-cols-2 gap-12 md:gap-20 max-w-6xl w-full items-center">
 
           <motion.div
             initial={{ opacity: 0, y: 80 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
-            className="space-y-8 max-w-lg"
+            className="space-y-6 md:space-y-8 max-w-lg"
           >
-            <h1 className="display-xl text-[92px] text-[color:var(--gold)] leading-[0.95]">
+            <h1 className="display-xl text-[40px] sm:text-[64px] md:text-[92px] text-[color:var(--gold)] leading-[0.95]">
               This is not just hair.
             </h1>
 
-            <p className="text-white/60 text-lg max-w-md">
+            <p className="text-white/60 text-base sm:text-lg max-w-md">
               This is identity. Precision. Presence. Crafted detail that transforms how you are seen before you even speak.
             </p>
 
-            <Link href="/book" className="px-8 py-3 border border-[color:var(--gold)]">
+            <Link href="/book" className="inline-block px-7 py-3 border border-[color:var(--gold)] text-sm sm:text-base">
               Book Appointment
             </Link>
           </motion.div>
 
           <div className="flex justify-center">
-            <div className="w-[320px] h-[560px]">
+            <div className="w-[240px] sm:w-[300px] md:w-[320px] h-[460px] sm:h-[520px] md:h-[560px]">
               <Hero />
             </div>
           </div>
@@ -91,14 +89,14 @@ export default function Home() {
       </section>
 
       {/* ABOUT */}
-      <section id="about" className="py-64 flex items-center justify-center px-6">
-        <motion.div style={{ y: aboutY }} className="max-w-3xl text-center space-y-8">
+      <section id="about" className="py-24 sm:py-40 md:py-64 flex items-center justify-center px-6">
+        <motion.div style={{ y: aboutY }} className="max-w-3xl text-center space-y-6 md:space-y-8">
 
-          <h2 className="text-[80px] tracking-tight text-[color:var(--gold)]">
+          <h2 className="text-[38px] sm:text-[60px] md:text-[80px] tracking-tight text-[color:var(--gold)]">
             More Than A Style
           </h2>
 
-          <p className="text-white/60 text-lg leading-[1.8]">
+          <p className="text-white/60 text-base sm:text-lg leading-[1.8]">
             Every detail is intentional. Every finish refined.
             This is not just styling — it is transformation.
           </p>
@@ -109,7 +107,7 @@ export default function Home() {
             but a presence that speaks before they do.
           </p>
 
-          <p className="text-[26px] italic text-[color:var(--gold)] pt-4">
+          <p className="text-[20px] sm:text-[26px] italic text-[color:var(--gold)] pt-4">
             “Your hair is the crown you never take off.”
           </p>
 
@@ -117,10 +115,10 @@ export default function Home() {
       </section>
 
       {/* SERVICES */}
-      <section id="services" className="py-56 px-6">
-        <motion.div style={{ y: servicesY }} className="max-w-6xl mx-auto space-y-20">
+      <section id="services" className="py-24 sm:py-40 md:py-56 px-6">
+        <motion.div style={{ y: servicesY }} className="max-w-6xl mx-auto space-y-16 md:space-y-20">
 
-          <h2 className="text-[80px] text-[color:var(--gold)] text-center">
+          <h2 className="text-[38px] sm:text-[60px] md:text-[80px] text-[color:var(--gold)] text-center">
             Services
           </h2>
 
@@ -129,7 +127,7 @@ export default function Home() {
             Pricing varies based on length, volume, and complexity.
           </p>
 
-          <div className="grid md:grid-cols-2 gap-14 perspective">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-14 perspective">
 
             {[
               {
@@ -154,48 +152,25 @@ export default function Home() {
               return (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, y: 100 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.2 }}
-                  viewport={{ once: true }}
                   onClick={() => setActiveCard(isActive ? null : i)}
                   className="cursor-pointer"
                 >
                   <motion.div
                     animate={{ rotateY: isActive ? 180 : 0 }}
                     transition={{ duration: 0.9 }}
-                    whileHover={{ y: -12, scale: 1.02 }}
-                    className="relative h-[360px] rounded-2xl border border-white/10 p-10 preserve-3d overflow-hidden bg-black/40 backdrop-blur-xl"
+                    whileTap={{ scale: 0.98 }}
+                    className="relative h-[320px] sm:h-[340px] md:h-[360px] rounded-2xl border border-white/10 p-6 sm:p-8 md:p-10 preserve-3d overflow-hidden bg-black/40 backdrop-blur-xl"
                   >
 
-                    {/* GOLD FLOW */}
-                    <motion.div
-                      className="absolute inset-0 opacity-30"
-                      animate={{ x: ["-40%", "40%", "-40%"] }}
-                      transition={{ duration: 12, repeat: Infinity }}
-                    >
-                      <div className="w-full h-full bg-gradient-to-r from-transparent via-[color:var(--gold)]/40 to-transparent blur-2xl" />
-                    </motion.div>
-
-                    {/* PINK FLOW */}
-                    <motion.div
-                      className="absolute inset-0 opacity-25"
-                      animate={{ x: ["40%", "-40%", "40%"] }}
-                      transition={{ duration: 14, repeat: Infinity }}
-                    >
-                      <div className="w-full h-full bg-gradient-to-r from-transparent via-[color:var(--pink)]/40 to-transparent blur-2xl" />
-                    </motion.div>
-
-                    {/* FRONT */}
                     <div className="absolute inset-0 backface-hidden flex flex-col justify-between">
 
-                      <h3 className="text-[46px] text-[color:var(--gold)]">
+                      <h3 className="text-[28px] sm:text-[36px] md:text-[46px] text-[color:var(--gold)]">
                         {service.title}
                       </h3>
 
                       <div className="space-y-2">
                         {service.items.map((item, idx) => (
-                          <div key={idx} className="flex justify-between text-sm">
+                          <div key={idx} className="flex justify-between text-xs sm:text-sm">
                             <span className="text-white/70">{item.name}</span>
                             <span className="text-[color:var(--gold-soft)]">{item.price}</span>
                           </div>
@@ -204,10 +179,9 @@ export default function Home() {
 
                     </div>
 
-                    {/* BACK */}
                     <div className="absolute inset-0 rotate-y-180 backface-hidden flex flex-col justify-center space-y-4">
                       {service.items.map((item, idx) => (
-                        <div key={idx} className="flex justify-between text-lg border-b border-white/10 pb-2">
+                        <div key={idx} className="flex justify-between text-sm sm:text-lg border-b border-white/10 pb-2">
                           <span>{item.name}</span>
                           <span className="text-[color:var(--gold)]">{item.price}</span>
                         </div>
