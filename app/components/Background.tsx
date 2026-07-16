@@ -1,24 +1,54 @@
 "use client";
 
 import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function Background() {
+  const getFallback = () => {
+    const isTouch = typeof window !== "undefined" && ("ontouchstart" in window || navigator.maxTouchPoints > 0);
+    const small = typeof window !== "undefined" && window.innerWidth < 768;
+    return isTouch || small;
+  };
+
+  // Start with `false` so server and initial client render match (video). Update after mount.
+  const [useImageFallback, setUseImageFallback] = useState<boolean>(false);
+
+  useEffect(() => {
+    // update after mount (deferred) to avoid SSR/client mismatch and cascading renders
+    const initial = getFallback();
+    if (initial) requestAnimationFrame(() => setUseImageFallback(initial));
+
+    function handleResize() {
+      setUseImageFallback(getFallback());
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="fixed inset-0 -z-20 overflow-hidden pointer-events-none">
 
-      {/* 🎬 HAIR VIDEO (MAIN VISUAL) */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-50 contrast-125 brightness-90 scale-110"
-      >
-        <source src="/video/hair-bg.mp4" type="video/mp4" />
-      </video>
+      {/* VIDEO BACKGROUND (desktop) or IMAGE FALLBACK (mobile/touch) */}
+      {!useImageFallback ? (
+        <video
+          className="w-full h-full object-cover opacity-60"
+          autoPlay
+          muted
+          loop
+          playsInline
+          src="/video/hair-bg.mp4"
+          poster="/hair/style5.png"
+        />
+      ) : (
+        <div className="w-full h-full relative">
+          <Image src="/hair/style5.png" alt="background" fill className="object-cover opacity-80" priority />
+        </div>
+      )}
 
-      {/* 🔥 LIGHT OVERLAY (NOT WASHING IT OUT) */}
-      <div className="absolute inset-0 bg-black/25" />
+      {/* DARKENING OVERLAY */}
+      <div className="absolute inset-0 bg-black/30" />
 
       {/* ✨ GOLD GLOW */}
       <motion.div
@@ -27,7 +57,7 @@ export default function Background() {
         className="absolute inset-0 blur-[120px]"
         style={{
           background:
-            "radial-gradient(circle at 25% 30%, rgba(230,194,139,0.3), transparent 70%)",
+            "radial-gradient(circle at 25% 30%, rgba(230,194,139,0.28), transparent 70%)",
         }}
       />
 
@@ -38,7 +68,7 @@ export default function Background() {
         className="absolute inset-0 blur-[140px]"
         style={{
           background:
-            "radial-gradient(circle at 75% 70%, rgba(255,77,141,0.25), transparent 75%)",
+            "radial-gradient(circle at 75% 70%, rgba(255,77,141,0.2), transparent 75%)",
         }}
       />
 

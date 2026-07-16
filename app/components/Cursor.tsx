@@ -3,11 +3,39 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
+const hasFinePointer = () => {
+  if (typeof window === "undefined" || window.innerWidth < 768) return false;
+  const hoverMatch = window.matchMedia?.("(hover: hover)")?.matches;
+  const pointerMatch = window.matchMedia?.("(pointer: fine)")?.matches;
+  return hoverMatch || pointerMatch || window.innerWidth >= 1024;
+};
+
 export default function Cursor() {
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [hover, setHover] = useState(false);
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const animationId = window.requestAnimationFrame(() => {
+      if (hasFinePointer()) {
+        setEnabled(true);
+      }
+    });
+
+    return () => {
+      window.cancelAnimationFrame(animationId);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) {
+      return;
+    }
+
     const move = (e: MouseEvent) => {
       setPos({ x: e.clientX, y: e.clientY });
     };
@@ -17,13 +45,13 @@ export default function Cursor() {
 
     window.addEventListener("mousemove", move);
 
-    // detect hover targets
-    const targets = document.querySelectorAll("button, video, a");
-
+    const targets = document.querySelectorAll("button, a, input, textarea, select");
     targets.forEach((el) => {
       el.addEventListener("mouseenter", addHover);
       el.addEventListener("mouseleave", removeHover);
     });
+
+    document.body.classList.add("custom-cursor-active");
 
     return () => {
       window.removeEventListener("mousemove", move);
@@ -31,36 +59,37 @@ export default function Cursor() {
         el.removeEventListener("mouseenter", addHover);
         el.removeEventListener("mouseleave", removeHover);
       });
+      document.body.classList.remove("custom-cursor-active");
     };
-  }, []);
+  }, [enabled]);
+
+  if (!enabled) {
+    return null;
+  }
 
   return (
     <div
-      className="fixed top-0 left-0 pointer-events-none z-[9999]"
+      className="fixed top-0 left-0 z-[9999] pointer-events-none"
       style={{
-        transform: `translate(${pos.x}px, ${pos.y}px)`,
+        left: pos.x,
+        top: pos.y,
+        transform: "translate(-50%, -50%)",
+        width: 76,
+        height: 76,
       }}
     >
-      {/* DEFAULT DOT */}
       <div
-        className={`absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ${
-          hover ? "scale-0 opacity-0" : "scale-100 opacity-100"
-        } w-3 h-3 bg-[#ff8fb8] rounded-full shadow-[0_0_15px_#ff8fb8]`}
-      />
-
-      {/* 🧴 SHAMPOO BOTTLE */}
-      <div
-        className={`absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-500 ${
-          hover
-            ? "scale-100 opacity-100 rotate-6"
-            : "scale-0 opacity-0 rotate-0"
+        className={`relative w-full h-full rounded-full transition-transform duration-200 ${
+          hover ? "scale-110" : "scale-100"
         }`}
       >
+        <div className="absolute inset-0 rounded-full bg-[rgba(230,194,139,0.18)] blur-2xl" />
         <Image
           src="/ui/bottle.png"
-          alt="cursor"
-          width={40}
-          height={40}
+          alt="hair shampoo cursor"
+          width={52}
+          height={52}
+          className="relative mx-auto mt-[12px] block"
         />
       </div>
     </div>

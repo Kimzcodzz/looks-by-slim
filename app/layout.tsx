@@ -1,13 +1,17 @@
 import "./globals.css";
-import Cursor from "./components/Cursor";
 import Background from "./components/Background";
+import Cursor from "./components/Cursor";
 import Link from "next/link";
 import Image from "next/image";
 
 export const metadata = {
   title: "Looks By Slim",
   description: "Luxury hair styling experience",
-  viewport: "width=device-width, initial-scale=1",
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -22,6 +26,8 @@ export default function RootLayout({
         {/* BACKGROUND */}
         <Background />
 
+        {/* Cinematic scroll temporarily disabled to restore native scrolling */}
+
         {/* CURSOR (disable on mobile for performance) */}
         <div className="hidden md:block">
           <Cursor />
@@ -32,28 +38,28 @@ export default function RootLayout({
           <div className="mt-4 flex items-center justify-between w-full max-w-5xl gap-4 md:gap-8 px-4 md:px-6 py-3 rounded-full glass pointer-events-auto">
 
             {/* LOGO */}
-            <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border border-[color:var(--gold)]/40 relative flex-shrink-0">
+            <Link href="/" className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border border-[color:var(--gold)]/40 relative flex-shrink-0">
               <Image
                 src="/logo/Looksbyslimlogo.png"
                 alt="Looks By Slim"
                 fill
                 className="object-cover"
               />
-            </div>
+            </Link>
 
-            {/* NAV LINKS (desktop only stays) */}
-            <div className="hidden md:flex gap-6 text-sm text-white/70">
-              <a href="#services" className="hover:text-white transition">
+            {/* NAV LINKS */}
+            <div className="flex flex-wrap gap-3 md:gap-6 text-xs sm:text-sm text-white/70">
+              <Link href="/#services" className="hover:text-white transition">
                 Services
-              </a>
+              </Link>
 
-              <a href="#stylist" className="hover:text-white transition">
+              <Link href="/#stylist" className="hover:text-white transition">
                 Stylist
-              </a>
+              </Link>
 
-              <a href="#work" className="hover:text-white transition">
-                Work
-              </a>
+              <Link href="/#gallery" className="hover:text-white transition">
+                Gallery
+              </Link>
             </div>
 
             {/* RIGHT SIDE */}
