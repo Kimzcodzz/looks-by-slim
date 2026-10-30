@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import Link from "next/link";
 
 const galleryItems = [
   { src: "style1", caption: "Look 1 includes: Braided Ponytail" },

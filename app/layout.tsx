@@ -3,6 +3,27 @@ import Background from "./components/Background";
 import Cursor from "./components/Cursor";
 import Link from "next/link";
 import Image from "next/image";
+import { Bodoni_Moda, Inter, Playfair_Display } from "next/font/google";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const playfairDisplay = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const bodoniModa = Bodoni_Moda({
+  subsets: ["latin"],
+  variable: "--font-bodoni",
+  weight: ["500", "600"],
+  display: "swap",
+});
 
 export const metadata = {
   title: "Looks By Slim",
@@ -21,7 +42,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-transparent text-white">
+      <body className={`${inter.variable} ${playfairDisplay.variable} ${bodoniModa.variable} bg-black text-white`}>
 
         {/* BACKGROUND */}
         <Background />
@@ -34,11 +55,11 @@ export default function RootLayout({
         </div>
 
         {/* 🔥 GLOBAL NAVBAR */}
-        <div className="fixed top-0 left-0 w-full z-[999] flex justify-center pointer-events-none px-4">
-          <div className="mt-4 flex items-center justify-between w-full max-w-5xl gap-4 md:gap-8 px-4 md:px-6 py-3 rounded-full glass pointer-events-auto">
+        <div className="header-shell fixed top-0 left-0 w-full z-[999] flex justify-center pointer-events-none px-3 md:px-4">
+          <div className="header-inner main-navbar mt-3 md:mt-4 flex items-center w-full max-w-[1120px] px-3 md:px-7 py-2.5 md:py-3.5 rounded-full glass pointer-events-auto">
 
             {/* LOGO */}
-            <Link href="/" className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border border-[color:var(--gold)]/40 relative flex-shrink-0">
+            <Link href="/" className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border border-[color:var(--gold)]/45 relative flex-shrink-0">
               <Image
                 src="/logo/Looksbyslimlogo.png"
                 alt="Looks By Slim"
@@ -48,33 +69,35 @@ export default function RootLayout({
             </Link>
 
             {/* NAV LINKS */}
-            <div className="flex flex-wrap gap-3 md:gap-6 text-xs sm:text-sm text-white/70">
-              <Link href="/#services" className="hover:text-white transition">
-                Services
-              </Link>
+            <div className="flex-1 flex justify-center min-w-0 px-2 md:px-0">
+              <div className="flex items-center gap-2 md:gap-8 text-[10px] sm:text-xs md:text-sm whitespace-nowrap overflow-x-auto">
+                <Link href="/#services" className="nav-premium-link">
+                  Services
+                </Link>
 
-              <Link href="/#stylist" className="hover:text-white transition">
-                Stylist
-              </Link>
+                <Link href="/#stylist" className="nav-premium-link">
+                  Stylist
+                </Link>
 
-              <Link href="/#gallery" className="hover:text-white transition">
-                Gallery
-              </Link>
+                <Link href="/#gallery" className="nav-premium-link">
+                  Gallery
+                </Link>
+              </div>
             </div>
 
             {/* RIGHT SIDE */}
-            <div className="flex items-center gap-3 md:gap-4">
+            <div className="ml-2 md:ml-auto flex items-center gap-2 md:gap-5 flex-shrink-0">
 
               <Link
                 href="/contact"
-                className="text-white/70 text-xs md:text-sm hover:text-white transition"
+                className="hidden md:inline-flex nav-premium-link nav-mobile-pill"
               >
                 Contact
               </Link>
 
               <Link
-                href="/book"
-                className="px-4 md:px-5 py-2 text-xs md:text-sm rounded-full border border-[color:var(--gold)] text-[color:var(--gold)] hover:bg-[color:var(--gold)] hover:text-black transition"
+                href="/policy"
+                className="nav-premium-cta"
               >
                 Book
               </Link>
